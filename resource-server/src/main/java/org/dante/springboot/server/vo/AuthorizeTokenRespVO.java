@@ -9,5 +9,4 @@ public class AuthorizeTokenRespVO {
 	private String tokenType = "bearer";
 	private int expiresIn = 3600;	// 过期时间（单位：秒）
 	private String refreshToken;
-	private String scope;
 }

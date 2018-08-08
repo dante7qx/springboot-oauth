@@ -14,8 +14,8 @@ spirit:
       client-secret: secret123456
       redirect-uri: http://localhost:8001/dante/oauth/callback
       scope: user
-      authorize-code-uri: http://localhost:8002/oauth/auth/code
+      authorize-uri: http://localhost:8002/oauth/authorize
       access-token-uri: http://localhost:8002/oauth/auth/token
-      auth-api-server-uri: http://localhost:8002/api
+      auth-api-server-uri: http://localhost:8002
       
       

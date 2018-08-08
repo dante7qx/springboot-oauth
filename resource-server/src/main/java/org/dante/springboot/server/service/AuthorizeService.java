@@ -38,7 +38,7 @@ public class AuthorizeService {
 			return null;
 		}
 		var code = generateRandomStr();
-		jedisClient.saveBean(clientId, code, spiritProperties.getCodeExpireTime() * 60);
+		jedisClient.saveString(clientId, code, spiritProperties.getCodeExpireTime() * 60);
 		return code;
 	}
 	
@@ -50,7 +50,7 @@ public class AuthorizeService {
 	 * @param redirectUrl
 	 * @return
 	 */
-	public AuthorizeTokenRespVO generateAccessToken(String code, String clientId, String redirectUrl, String scope) {
+	public AuthorizeTokenRespVO generateAccessToken(String code, String clientId, String redirectUrl) {
 		var codeVal = jedisClient.getString(clientId);
 		if (!code.equals(codeVal)) {
 			return null;
@@ -65,7 +65,6 @@ public class AuthorizeService {
 		resp.setAccessToken(accessToken);
 		resp.setRefreshToken(refreshToken);
 		resp.setExpiresIn(spiritProperties.getExpireTime());
-		resp.setScope(scope);
 		return resp;
 	}
 	

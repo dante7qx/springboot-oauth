@@ -1,8 +1,13 @@
 package org.dante.springboot.thirdclient.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang3.RandomStringUtils;
+import org.dante.springboot.thirdclient.exception.OAuthException;
 import org.dante.springboot.thirdclient.prop.SpiritProperties;
 import org.dante.springboot.thirdclient.service.DanteService;
+import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
+import org.dante.springboot.thirdclient.vo.dante.DanteUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +36,13 @@ public class DanteAuthorizeController {
 	 */
 	@GetMapping("/home")
 	public String home(Model model) {
-		
+		try {
+			List<DanteUserVO> users = danteService.findDanteServerUsers();
+			model.addAttribute("users", users);
+		} catch (OAuthException e) {
+			log.error("findDanteServerUsers error.", e);
+			return "index";
+		}
 		return "dante/index";
 	}
 
@@ -43,7 +54,7 @@ public class DanteAuthorizeController {
 	@GetMapping("/oauth/authorize")
 	public String authorize() {
 		var dante = spiritProperties.getDante();
-		var serverAuthorizeUri = dante.getAuthorizeCodeUri()
+		var serverAuthorizeUri = dante.getAuthorizeUri()
 				.concat("?")
 				.concat("response_type=code")
 				.concat("&client_id=").concat(dante.getClientId())
@@ -62,6 +73,7 @@ public class DanteAuthorizeController {
 	 * @param state
 	 * @return
 	 */
+	@GetMapping("/oauth/callback")
 	public String authorizeCallback(@RequestParam("code") String code, @RequestParam("client_id") String clientId,
 			@RequestParam("redirect_uri") String redirectUri,
 			@RequestParam(name = "state", required = false, defaultValue = "") String state) {
@@ -70,6 +82,18 @@ public class DanteAuthorizeController {
 		var checkMsg = danteService.checkCallbackParam(code, clientId, redirectUri);
 		if(!StringUtils.isEmpty(checkMsg)) {
 			return checkMsg;
+		}
+		AccessTokenReqVO accessTokenReq = new AccessTokenReqVO();
+		accessTokenReq.setClientId(clientId);
+		accessTokenReq.setClientSecret(spiritProperties.getDante().getClientSecret());
+		accessTokenReq.setCode(code);
+		accessTokenReq.setRedirectUri(redirectUri);
+		accessTokenReq.setState(state);
+		try {
+			danteService.applyAccessToken(accessTokenReq);
+		} catch (Exception e) {
+			log.error("获取AccessToken error", e);
+			return e.getMessage();
 		}
 		
 		return "redirect:/dante/home";

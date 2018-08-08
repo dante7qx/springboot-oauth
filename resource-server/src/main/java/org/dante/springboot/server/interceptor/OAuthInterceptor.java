@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.dante.springboot.server.service.AuthorizeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,8 +20,12 @@ public class OAuthInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		String accessToken = request.getParameter("accessToken");
-		log.info("Request accessToken ============> {}", accessToken);
+		String param = request.getHeader("Authorization");
+		log.info("Request param ============> {}", param);
+		if(StringUtils.isEmpty(param)) {
+			return false;
+		}
+		String accessToken = param.split("\\s+")[1];
 		if(authorizeService.checkAccessToken(accessToken)) {
 			return true;
 		}

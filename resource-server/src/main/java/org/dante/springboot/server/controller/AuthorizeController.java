@@ -78,8 +78,7 @@ public class AuthorizeController {
 		String code = authorizeTokenVO.getCode();
 		String clientId = authorizeTokenVO.getClientId();
 		String redirectUri = authorizeTokenVO.getRedirectUri();
-		String scope = authorizeTokenVO.getScope();
-		AuthorizeTokenRespVO accessToken = authorizeService.generateAccessToken(code, clientId, redirectUri, scope);
+		AuthorizeTokenRespVO accessToken = authorizeService.generateAccessToken(code, clientId, redirectUri);
 		return accessToken;
 	}
 	

@@ -14,5 +14,4 @@ public class AuthorizeTokenReqVO {
 	private String grantType = "authorization_code";	// 授权方式 - 授权码方式
 	private String clientId;
 	private String redirectUri;
-	private String scope;
 }

@@ -26,7 +26,7 @@ public class DanteProp {
 	/**
 	 * 服务端授权码接口
 	 */
-	private String authorizeCodeUri;
+	private String authorizeUri;
 	/**
 	 * 服务端访问令牌接口
 	 */
