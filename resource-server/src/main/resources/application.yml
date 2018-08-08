@@ -1,0 +1,23 @@
+server:
+  port: 8002
+spring:
+  thymeleaf:
+    cache: false
+  redis:
+    database: 1
+  jpa:
+    database-platform: H2
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+logging:
+  level:
+    root: info
+    org.hibernate: info
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.type.descriptor.sql.BasicExtractor: info
+    org.dante.springcloud: debug
+spirit:
+  expire-time: 3600
+  code-expire-time: 5  

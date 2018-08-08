@@ -1,0 +1,21 @@
+server:
+  port: 8001
+spring:
+  thymeleaf:
+    cache: false
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+spirit:
+  oauth:
+    dante:
+      client-id: 6de66752f7fc4f1aa4ad6e792d12a45e
+      client-secret: secret123456
+      redirect-uri: http://localhost:8001/dante/oauth/callback
+      scope: user
+      authorize-code-uri: http://localhost:8002/oauth/auth/code
+      access-token-uri: http://localhost:8002/oauth/auth/token
+      auth-api-server-uri: http://localhost:8002/api
+      
+      

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>但丁 - OAuth客户端</title>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+h1 {
+	text-align: center;
+	margin-top: 50px;
+}
+div {
+	position: absolute;
+	left: 35%;
+	top: 45%;
+	width: 80%;
+	display: flex;
+	flex-direction: row;
+}
+
+div img {
+	cursor: pointer;
+	width: 128px;
+	height: 128px;
+	margin-right: 20px;
+}
+</style>
+</head>
+<body>
+	<h1>但丁 - OAuth客户端</h1>
+	
+	<div>
+		<img alt="dante" src="images/dante.jpg">
+		<img alt="github" src="images/github.png">
+	</div>
+	<form id="oauthForm" method="get"></form>
+	<script type="text/javascript">
+		var OAuthPage = {
+			init: function() {
+				var imgs = document.getElementsByTagName('img');
+				for(var i=0; i<imgs.length; i++) {
+					imgs[i].onclick = this.auth;
+				}
+			},
+			auth: function(evt) {
+				var type = evt.target.getAttribute("alt");
+				var authForm = document.getElementById("oauthForm");
+				authForm.setAttribute("action", type + "/oauth/authorize");
+				authForm.submit();
+			}
+		};
+		
+		OAuthPage.init();
+	</script>
+</body>
+</html>

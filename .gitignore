@@ -1,5 +1,15 @@
 # Compiled class file
 *.class
+*.project
+*.classpath
+.springBeans
+.DS_Store
+.apt_generated/
+.apt_generated_tests/
+.factorypath
+.settings/
+target/
+target@tmp/
 
 # Log file
 *.log
