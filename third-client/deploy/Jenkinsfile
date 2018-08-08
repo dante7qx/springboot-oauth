@@ -2,7 +2,7 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 def currentTime() {
     String str = "";
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdHHmmss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     Calendar lastDate = Calendar.getInstance();
     lastDate.add(Calendar.MINUTE, 2);
     str = sdf.format(lastDate.getTime());
