@@ -1,0 +1,46 @@
+import java.util.*;
+import java.text.SimpleDateFormat;
+def currentTime() {
+    String str = "";
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdHHmmss");
+    Calendar lastDate = Calendar.getInstance();
+    lastDate.add(Calendar.MINUTE, 2);
+    str = sdf.format(lastDate.getTime());
+    return str;
+}
+def  imageTag = currentTime()
+node {
+  def M2_HOME=tool 'maven3.5.0'
+  def SOURCE_DIR='/Users/dante/Documents/Project/spring/springboot-oauth2/third-client'
+
+  stage('编译') { 
+    dir("${SOURCE_DIR}") {
+      sh "${M2_HOME}/bin/mvn package -Dmaven.test.skip=true"
+    }
+  }
+  
+  stage('构建镜像') {
+    dir("${SOURCE_DIR}/target/") {
+      sh "cp -f ../deploy/Dockerfile ./"
+      sh "docker build -t harbor.bizjetcloud.com/spiritprd/oauth-client:${imageTag} ."
+    }
+  }
+
+  stage('推送镜像') {
+    withCredentials([usernamePassword(credentialsId: 'bizjetcloud_spiritprd', passwordVariable: 'upwd', usernameVariable: 'uname')]) {
+       sh "docker login harbor.bizjetcloud.com -u ${uname} -p ${upwd}"
+       sh "docker push harbor.bizjetcloud.com/spiritprd/oauth-client:${imageTag}"
+    }
+  }
+
+  stage('清理Workspace') {
+    dir("${SOURCE_DIR}") {
+      sh "${M2_HOME}/bin/mvn clean"
+    }
+    cleanWs notFailBuild: true
+  }
+  
+  stage('删除本地Docker镜像') {
+    sh "docker rmi harbor.bizjetcloud.com/spiritprd/oauth-client:${imageTag}"
+  }
+}
