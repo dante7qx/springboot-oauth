@@ -5,6 +5,8 @@ import lombok.Data;
 /**
  * Dante OAuth 配置类
  * 
+ * https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps
+ * 
  * @author dante
  *
  */

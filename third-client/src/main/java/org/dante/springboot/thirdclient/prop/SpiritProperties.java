@@ -10,13 +10,18 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "spirit.oauth")
 public class SpiritProperties {
 	/**
-	 * 但丁 服务端配置
+	 * 但丁 - 服务端配置
 	 */
 	private DanteProp dante;
 	
 	/**
-	 * Github 服务端配置
+	 * Github - 服务端配置
 	 */
 	private GithubProp github;
+	
+	/**
+	 * 微信 - 服务端配置
+	 */
+	private WechatProp wechat;
 	
 }
