@@ -27,7 +27,7 @@ node {
   }
 
   stage('推送镜像') {
-    withCredentials([usernamePassword(credentialsId: 'bizjetcloud_spiritprd', passwordVariable: 'upwd', usernameVariable: 'uname')]) {
+    withCredentials([usernamePassword(credentialsId: 'bizjetcloud_harbor_secret', passwordVariable: 'upwd', usernameVariable: 'uname')]) {
        sh "docker login harbor.bizjetcloud.com -u ${uname} -p ${upwd}"
        sh "docker push harbor.bizjetcloud.com/spiritprd/oauth-client:${imageTag}"
     }
