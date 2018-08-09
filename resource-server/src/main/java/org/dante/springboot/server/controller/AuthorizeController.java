@@ -32,12 +32,16 @@ public class AuthorizeController {
 		String scope = request.getParameter("scope");
 		String state = request.getParameter("state");
 
-		redirectAttributes.addFlashAttribute("responseType", responseType);
-		redirectAttributes.addFlashAttribute("clientId", clientId);
-		redirectAttributes.addFlashAttribute("redirectUri", redirectUri);
+		/**
+		 * 重定向（redirect:/oauth/login）时使用 RedirectAttributes 传递参数 
+		 */
+		redirectAttributes.addFlashAttribute("response_type", responseType);
+		redirectAttributes.addFlashAttribute("client_id", clientId);
+		redirectAttributes.addFlashAttribute("redirect_uri", redirectUri);
 		redirectAttributes.addFlashAttribute("scope", scope);
 		redirectAttributes.addFlashAttribute("state", state);
-		return "redirect:/oauth/login";
+//		return "redirect:/oauth/login";
+		return "forward:/oauth/login";
 	}
 	
 	/**

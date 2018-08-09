@@ -44,11 +44,11 @@
 				<button type="submit">登录</button>
 			</div>
 		</div>
-		<input type="hidden" name="responseType" th:value="${responseType}"/>
-		<input type="hidden" name="clientId" th:value="${clientId}"/>
-		<input type="hidden" name="redirectUri" th:value="${redirectUri}"/>
-		<input type="hidden" name="scope" th:value="${scope}"/>
-		<input type="hidden" name="state" th:value="${state}"/>
+		<input type="hidden" name="responseType" th:value="${#httpServletRequest.getParameter('response_type')}"/>
+		<input type="hidden" name="clientId" th:value="${#httpServletRequest.getParameter('client_id')}"/>
+		<input type="hidden" name="redirectUri" th:value="${#httpServletRequest.getParameter('redirect_uri')}"/>
+		<input type="hidden" name="scope" th:value="${#httpServletRequest.getParameter('scope')}"/>
+		<input type="hidden" name="state" th:value="${#httpServletRequest.getParameter('state')}"/>
 	</form>
 </body>
 </html>
