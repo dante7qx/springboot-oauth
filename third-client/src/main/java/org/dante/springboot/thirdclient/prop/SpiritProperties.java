@@ -9,5 +9,14 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(prefix = "spirit.oauth")
 public class SpiritProperties {
+	/**
+	 * 但丁 服务端配置
+	 */
 	private DanteProp dante;
+	
+	/**
+	 * Github 服务端配置
+	 */
+	private GithubProp github;
+	
 }
