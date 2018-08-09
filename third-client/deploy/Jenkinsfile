@@ -21,8 +21,8 @@ node {
   
   stage('构建镜像') {
     dir("${SOURCE_DIR}/target/") {
-      sh "cp -f ../deploy/Dockerfile ./"
-      sh "docker build -t harbor.bizjetcloud.com/spiritprd/oauth-client:${imageTag} ."
+      sh "cp -f ../deploy/Dockerfile_Local ./"
+      sh "docker build -t harbor.bizjetcloud.com/spiritprd/oauth-client:${imageTag} -f Docker_Local ."
     }
   }
 
