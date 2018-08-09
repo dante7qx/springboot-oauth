@@ -11,11 +11,11 @@ spirit:
   oauth:
     dante:
       client-id: 6de66752f7fc4f1aa4ad6e792d12a45e
-      client-secret: secret123456
+      client-secret: 0b37929df2bb3689f8605e11f2c4306f649cebb9
       redirect-uri: http://localhost:8001/dante/oauth/callback
       scope: user
       authorize-uri: http://localhost:8002/oauth/authorize
       access-token-uri: http://localhost:8002/oauth/auth/token
       auth-api-server-uri: http://localhost:8002
-      
+      public-key: rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3JpdGhtdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQB+AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F1cgACW0Ks8xf4BghU4AIAAHhwAAABJjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALmeE3Ly0MnswGnz2xOc8m2wgL/0PdBsYC7rx9DufHRVdGkXXavwKwx+DYxzTojeappX4V0ahYStIqH0qXRSMS+yCxtTvrz9KO64J4xw3VFO05J6YJ4DHkNfqBPOkwyEOp34ePLFCNAbAjV5Dv8UBwENrcKPIvztmwq6CufvmAMegeimo6sVNTUK5hFFZjSWe0aw0EnIcb5sV7WkjuePZXZCg/A6NyQEHRungh2afAHRZr/b0BijqwWopx3fr4Do5M+HP+YlH6vIHAvSZPRraq8Cr7cPsSuILmAiT0WjWPTKAwn/ofp6nlkuj3aw+Yd4kk66XNVraTIMwyRgE6wBDi0CAwEAAXQABVguNTA5fnIAGWphdmEuc2VjdXJpdHkuS2V5UmVwJFR5cGUAAAAAAAAAABIAAHhyAA5qYXZhLmxhbmcuRW51bQAAAAAAAAAAEgAAeHB0AAZQVUJMSUM=
       

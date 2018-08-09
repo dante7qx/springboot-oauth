@@ -11,7 +11,9 @@ import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
 import org.dante.springboot.thirdclient.vo.dante.AccessTokenRespVO;
 import org.dante.springboot.thirdclient.vo.dante.DanteUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -64,13 +66,20 @@ public class DanteService {
 	 * 
 	 * @param accessTokenReq
 	 * @return
+	 * @throws OAuthException 
 	 */
-	public void applyAccessToken(AccessTokenReqVO accessTokenReq) {
-		AccessTokenRespVO accessTokenResp = tokenWebClient.post()
+	public void applyAccessToken(AccessTokenReqVO accessTokenReq) throws OAuthException {
+		ResponseEntity<AccessTokenRespVO> resp = tokenWebClient.post()
 			.uri("")
 			.accept(MediaType.APPLICATION_JSON_UTF8)
-			.syncBody(accessTokenReq).retrieve()
-			.bodyToMono(AccessTokenRespVO.class).block();
+			.syncBody(accessTokenReq)
+			.exchange()
+			.flatMap(response -> response.toEntity(AccessTokenRespVO.class))
+			.block();
+		if(HttpStatus.INTERNAL_SERVER_ERROR.equals(resp.getStatusCode())) {
+			throw new OAuthException(resp.getHeaders().getFirst("ErrorMsg"));
+		}
+		AccessTokenRespVO accessTokenResp = resp.getBody();
 		var accessToken = accessTokenResp.getAccessToken();
 		var refreshToken = accessTokenResp.getRefreshToken();
 		var expireIn = accessTokenResp.getExpiresIn();
@@ -100,6 +109,12 @@ public class DanteService {
 		return users;
 	}
 	
+	/**
+	 * 构造 API 请求 Header
+	 * 
+	 * @return
+	 * @throws OAuthException
+	 */
 	private String buildReqHeader() throws OAuthException {
 		var val = jedisClient.getString(OAuthConsts.DANTE_ACCESS_TOKEN);
 		if(StringUtils.isEmpty(val)) {

@@ -21,7 +21,7 @@ public class OAuthInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		String param = request.getHeader("Authorization");
-		log.info("Request param ============> {}", param);
+		log.info("Request header param ============> Authorization: {}", param);
 		if(StringUtils.isEmpty(param)) {
 			return false;
 		}

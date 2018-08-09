@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.dante.springboot.thirdclient.exception.OAuthException;
+import org.dante.springboot.thirdclient.prop.DanteProp;
 import org.dante.springboot.thirdclient.prop.SpiritProperties;
 import org.dante.springboot.thirdclient.service.DanteService;
+import org.dante.springboot.thirdclient.util.CertificateUtil;
 import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
 import org.dante.springboot.thirdclient.vo.dante.DanteUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class DanteAuthorizeController {
 			model.addAttribute("users", users);
 		} catch (OAuthException e) {
 			log.error("findDanteServerUsers error.", e);
-			return "index";
+			return "redirect:/";
 		}
 		return "dante/index";
 	}
@@ -83,9 +85,11 @@ public class DanteAuthorizeController {
 		if(!StringUtils.isEmpty(checkMsg)) {
 			return checkMsg;
 		}
+		DanteProp dante = spiritProperties.getDante();
 		AccessTokenReqVO accessTokenReq = new AccessTokenReqVO();
 		accessTokenReq.setClientId(clientId);
-		accessTokenReq.setClientSecret(spiritProperties.getDante().getClientSecret());
+		// ClientSecret 需要用公钥进行加密，并 Base64 编码
+		accessTokenReq.setClientSecret(CertificateUtil.encryption(dante.getPublicKey(), dante.getClientSecret()));
 		accessTokenReq.setCode(code);
 		accessTokenReq.setRedirectUri(redirectUri);
 		accessTokenReq.setState(state);

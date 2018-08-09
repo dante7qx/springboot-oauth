@@ -34,7 +34,7 @@
 		<div class="pdiv">
 			<div>
 				<label>用户名</label>
-				<input type="text" name="userName"/>
+				<input id="username" type="text" name="userName" placeholder="wangwu"/>
 			</div>
 			<div>
 				<label>密&nbsp;&nbsp;&nbsp;码</label>
@@ -50,5 +50,10 @@
 		<input type="hidden" name="scope" th:value="${#httpServletRequest.getParameter('scope')}"/>
 		<input type="hidden" name="state" th:value="${#httpServletRequest.getParameter('state')}"/>
 	</form>
+	<script type="text/javascript">
+		window.onload = function() {
+			document.getElementById("username").focus();
+		};
+	</script>
 </body>
 </html>

@@ -39,4 +39,8 @@ public class DanteProp {
 	 * 服务端资源 API 接口
 	 */
 	private String authApiServerUri;
+	/**
+	 * 但丁资源服务端的公钥
+	 */
+	private String publicKey;
 }

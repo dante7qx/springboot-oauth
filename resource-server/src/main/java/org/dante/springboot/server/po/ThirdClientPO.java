@@ -15,7 +15,10 @@ public class ThirdClientPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String clientId;
-	private String redirectUri;
 	private String name;
+	private String clientId;
+	private String clientSecret;
+	private String redirectUri;
+	private String scope;
+	private String privateKey;
 }
