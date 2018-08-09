@@ -2,7 +2,7 @@ FROM dante2012/spirit-java:10
 
 LABEL MAINTAINER "dante <sunchao.0129@163.com>"
 
-ADD third-client-1.0.jar app.jar
+ADD https://github.com/dante7qx/mvnrepo/blob/master/third-client-1.0.jar app.jar
 
 RUN sh -c 'touch app.jar'
 RUN chmod 644 app.jar
