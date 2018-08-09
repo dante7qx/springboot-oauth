@@ -22,7 +22,7 @@ spirit:
       client-id: 2a072c55d48f194676f7
       client-secret: 0b37929df2bb3689f8605e11f2c4306f649cebb9
       redirect-uri: 
-      scope: repo
+      scope: user,repo
       authorize-uri: https://github.com/login/oauth/authorize
       access-token-uri: https://github.com/login/oauth/access_token
       auth-api-server-uri: https://api.github.com

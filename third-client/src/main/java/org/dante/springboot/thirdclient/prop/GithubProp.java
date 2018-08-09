@@ -3,7 +3,7 @@ package org.dante.springboot.thirdclient.prop;
 import lombok.Data;
 
 /**
- * Dante OAuth 配置类
+ * Github OAuth 配置类
  * 
  * https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps
  * 
@@ -41,8 +41,4 @@ public class GithubProp {
 	 * 服务端资源 API 接口
 	 */
 	private String authApiServerUri;
-	/**
-	 * 但丁资源服务端的公钥
-	 */
-	private String publicKey;
 }
