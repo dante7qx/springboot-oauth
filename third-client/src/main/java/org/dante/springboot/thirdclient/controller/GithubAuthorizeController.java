@@ -83,7 +83,7 @@ public class GithubAuthorizeController {
 		GithubProp github = spiritProperties.getGithub();
 		String clientId = github.getClientId();
 		String redirectUri = github.getRedirectUri();
-		var checkMsg = githubService.checkCallbackParam(code, clientId, redirectUri);
+		var checkMsg = githubService.checkCallbackParam(code);
 		if(!StringUtils.isEmpty(checkMsg)) {
 			return checkMsg;
 		}

@@ -38,20 +38,12 @@ public class GithubService {
 	 * 
 	 * @return
 	 */
-	public String checkCallbackParam(String code, String clientId, String redirectUri) {
+	public String checkCallbackParam(String code) {
 		var msg = new StringBuilder();
-		var dante = spiritProperties.getDante();
 		if(StringUtils.isEmpty(code)) {
 			msg.append("授权码为空，非法！");
 		}
 		
-		if(!dante.getClientId().equals(clientId)) {
-			msg.append("非法的ClientId！");
-		}
-		
-		if(!dante.getRedirectUri().equals(redirectUri)) {
-			msg.append("非法的RedirectUri！");
-		}
 		return msg.toString();
 	}
 	
