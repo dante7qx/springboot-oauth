@@ -77,15 +77,16 @@ public class GithubAuthorizeController {
 	 * @return
 	 */
 	@GetMapping("/oauth/callback")
-	public String authorizeCallback(@RequestParam("code") String code, @RequestParam("client_id") String clientId,
-			@RequestParam("redirect_uri") String redirectUri,
+	public String authorizeCallback(@RequestParam("code") String code, 
 			@RequestParam(name = "state", required = false, defaultValue = "") String state) {
 		log.info("Github Resource Server invoke Client callback url, Authozation Code is {}", code);
+		GithubProp github = spiritProperties.getGithub();
+		String clientId = github.getClientId();
+		String redirectUri = github.getRedirectUri();
 		var checkMsg = githubService.checkCallbackParam(code, clientId, redirectUri);
 		if(!StringUtils.isEmpty(checkMsg)) {
 			return checkMsg;
 		}
-		GithubProp github = spiritProperties.getGithub();
 		AccessTokenReqVO accessTokenReq = new AccessTokenReqVO();
 		accessTokenReq.setClientId(clientId);
 		accessTokenReq.setClientSecret(github.getClientSecret());
