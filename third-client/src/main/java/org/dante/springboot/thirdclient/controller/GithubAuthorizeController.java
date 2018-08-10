@@ -1,16 +1,16 @@
 package org.dante.springboot.thirdclient.controller;
 
-import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
-import org.dante.springboot.thirdclient.exception.OAuthException;
+import org.dante.springboot.thirdclient.prop.GithubProp;
 import org.dante.springboot.thirdclient.prop.SpiritProperties;
-import org.dante.springboot.thirdclient.vo.dante.DanteUserVO;
+import org.dante.springboot.thirdclient.service.GithubService;
+import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,8 @@ public class GithubAuthorizeController {
 	
 	@Autowired
 	private SpiritProperties spiritProperties;
+	@Autowired
+	private GithubService githubService;
 	
 	/**
 	 * Github 主页
@@ -43,8 +45,7 @@ public class GithubAuthorizeController {
 	}
 	*/
 	@GetMapping("/home")
-	@ResponseBody
-	public String home() {
+	public @ResponseBody String home() {
 		return spiritProperties.getGithub().toString();
 	}
 	
@@ -64,5 +65,40 @@ public class GithubAuthorizeController {
 				.concat("&scope=").concat(github.getScope())
 				.concat("&state=").concat(RandomStringUtils.randomAlphabetic(6).toLowerCase());
 		return "redirect:".concat(serverAuthorizeUri);
+	}
+	
+	/**
+	 * 客户端回调Url
+	 * 
+	 * @param code
+	 * @param clientId
+	 * @param redirectUri
+	 * @param state
+	 * @return
+	 */
+	@GetMapping("/oauth/callback")
+	public String authorizeCallback(@RequestParam("code") String code, @RequestParam("client_id") String clientId,
+			@RequestParam("redirect_uri") String redirectUri,
+			@RequestParam(name = "state", required = false, defaultValue = "") String state) {
+		log.info("Github Resource Server invoke Client callback url, Authozation Code is {}", code);
+		var checkMsg = githubService.checkCallbackParam(code, clientId, redirectUri);
+		if(!StringUtils.isEmpty(checkMsg)) {
+			return checkMsg;
+		}
+		GithubProp github = spiritProperties.getGithub();
+		AccessTokenReqVO accessTokenReq = new AccessTokenReqVO();
+		accessTokenReq.setClientId(clientId);
+		accessTokenReq.setClientSecret(github.getClientSecret());
+		accessTokenReq.setCode(code);
+		accessTokenReq.setRedirectUri(redirectUri);
+		accessTokenReq.setState(state);
+		try {
+			githubService.applyAccessToken(accessTokenReq);
+		} catch (Exception e) {
+			log.error("获取AccessToken error", e);
+			return e.getMessage();
+		}
+		
+		return "redirect:/github/home";
 	}
 }

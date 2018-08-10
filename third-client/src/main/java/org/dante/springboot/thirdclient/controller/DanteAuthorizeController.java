@@ -79,8 +79,7 @@ public class DanteAuthorizeController {
 	public String authorizeCallback(@RequestParam("code") String code, @RequestParam("client_id") String clientId,
 			@RequestParam("redirect_uri") String redirectUri,
 			@RequestParam(name = "state", required = false, defaultValue = "") String state) {
-		
-		log.info("Resource Server invoke Client callback url, Authozation Code is {}", code);
+		log.info("Dante Resource Server invoke Client callback url, Authozation Code is {}", code);
 		var checkMsg = danteService.checkCallbackParam(code, clientId, redirectUri);
 		if(!StringUtils.isEmpty(checkMsg)) {
 			return checkMsg;
@@ -99,10 +98,6 @@ public class DanteAuthorizeController {
 			log.error("获取AccessToken error", e);
 			return e.getMessage();
 		}
-		
 		return "redirect:/dante/home";
 	}
-	
-	
-	
 }
