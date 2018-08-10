@@ -5,8 +5,8 @@ import javax.annotation.PostConstruct;
 import org.dante.springboot.thirdclient.constant.OAuthConsts;
 import org.dante.springboot.thirdclient.exception.OAuthException;
 import org.dante.springboot.thirdclient.prop.SpiritProperties;
-import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
-import org.dante.springboot.thirdclient.vo.dante.AccessTokenRespVO;
+import org.dante.springboot.thirdclient.vo.github.AccessTokenReqVO;
+import org.dante.springboot.thirdclient.vo.github.AccessTokenRespVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -48,8 +48,8 @@ public class GithubService {
 	}
 	
 	/**
-	 * 获取但丁 Resource Server 访问令牌
-	 * 将 AccessToken 和 RefreshToken 存储到 Redis 中
+	 * 获取 Github Resource Server 访问令牌
+	 * 将 AccessToken 存储到 Redis 中
 	 * 
 	 * @param accessTokenReq
 	 * @return
@@ -57,15 +57,17 @@ public class GithubService {
 	 */
 	public void applyAccessToken(AccessTokenReqVO accessTokenReq) throws OAuthException {
 		AccessTokenRespVO accessTokenResp = tokenWebClient.post()
-			.uri("")
-			.accept(MediaType.APPLICATION_JSON_UTF8)
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
 			.syncBody(accessTokenReq)
 			.retrieve()
 			.bodyToMono(AccessTokenRespVO.class)
 			.block();
-		var accessToken = accessTokenResp.getAccessToken();
-		var tokenType = accessTokenResp.getTokenType();
-		jedisClient.saveString(OAuthConsts.DANTE_ACCESS_TOKEN, accessToken.concat("_").concat(tokenType));
+		if(StringUtils.isEmpty(accessTokenResp.getError())) {
+			jedisClient.saveString(OAuthConsts.GITHUB_ACCESS_TOKEN, accessTokenResp.getAccessToken());
+		} else {
+			throw new OAuthException("从 Github 获取 Token 失败 [" + accessTokenResp.getErrorDescription() + "]");
+		}
 	}
 	
 	/**
@@ -79,8 +81,6 @@ public class GithubService {
 		if(StringUtils.isEmpty(val)) {
 			throw new OAuthException("Token 已经过期，请重新申请! ");
 		}
-		var arr = val.split("_");
-//		return "token ".concat(arr[0]);
-		return arr[1].concat(" ").concat(arr[0]);
+		return "token ".concat(val);
 	}
 }

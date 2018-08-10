@@ -14,7 +14,7 @@
 		<artifactId>oauth2-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

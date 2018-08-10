@@ -21,7 +21,7 @@ spirit:
     github:
       client-id: 2a072c55d48f194676f7
       client-secret: 0b37929df2bb3689f8605e11f2c4306f649cebb9
-      redirect-uri: 
+      redirect-uri: http://spiritprd-oauth-client.test.bizjetcloud.com/github/oauth/callback
       scope: user,repo
       authorize-uri: https://github.com/login/oauth/authorize
       access-token-uri: https://github.com/login/oauth/access_token
