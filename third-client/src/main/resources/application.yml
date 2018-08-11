@@ -1,6 +1,9 @@
 server:
   port: 8001
 spring:
+  mvc:
+    favicon:
+      enabled: false
   thymeleaf:
     cache: false
   redis:
@@ -29,5 +32,3 @@ spirit:
     wechat:
       app-id: wxc94c4e95f176c3c5
       appsecret: 1a7426b06da8de84ad4ab5d8e9b5dd4a
-      
-     

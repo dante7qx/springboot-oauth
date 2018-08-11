@@ -1,4 +1,4 @@
-package org.dante.springboot.thirdclient.service;
+package org.dante.springboot.thirdclient.service.dante;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.dante.springboot.thirdclient.constant.OAuthConsts;
 import org.dante.springboot.thirdclient.exception.OAuthException;
 import org.dante.springboot.thirdclient.prop.SpiritProperties;
+import org.dante.springboot.thirdclient.service.JedisClient;
 import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
 import org.dante.springboot.thirdclient.vo.dante.AccessTokenRespVO;
 import org.dante.springboot.thirdclient.vo.dante.DanteUserVO;

@@ -3,10 +3,12 @@ package org.dante.springboot.thirdclient.controller;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.dante.springboot.thirdclient.constant.OAuthConsts;
 import org.dante.springboot.thirdclient.exception.OAuthException;
 import org.dante.springboot.thirdclient.prop.DanteProp;
 import org.dante.springboot.thirdclient.prop.SpiritProperties;
-import org.dante.springboot.thirdclient.service.DanteService;
+import org.dante.springboot.thirdclient.service.JedisClient;
+import org.dante.springboot.thirdclient.service.dante.DanteService;
 import org.dante.springboot.thirdclient.util.CertificateUtil;
 import org.dante.springboot.thirdclient.vo.dante.AccessTokenReqVO;
 import org.dante.springboot.thirdclient.vo.dante.DanteUserVO;
@@ -29,6 +31,8 @@ public class DanteAuthorizeController {
 	private SpiritProperties spiritProperties;
 	@Autowired
 	private DanteService danteService;
+	@Autowired
+	private JedisClient jedisClient;
 	
 	/**
 	 * 但丁主页
@@ -63,6 +67,10 @@ public class DanteAuthorizeController {
 				.concat("&redirect_uri=").concat(dante.getRedirectUri())
 				.concat("&scope=").concat(dante.getScope())
 				.concat("&state=").concat(RandomStringUtils.randomAlphabetic(6).toLowerCase());
+		var accessToken = jedisClient.getString(OAuthConsts.DANTE_ACCESS_TOKEN);
+		if(!StringUtils.isEmpty(accessToken)) {
+			return "redirect:/dante/home";
+		}
 		return "redirect:".concat(serverAuthorizeUri);
 	}
 	

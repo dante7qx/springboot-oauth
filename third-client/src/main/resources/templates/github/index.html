@@ -1,11 +1,195 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Github 服务资源</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link th:href="@{/css/material-icons.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/css/vue-material.min.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/css/default.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/css/github/github.css}" rel="stylesheet" type="text/css">
+	<title>Github 服务资源</title>
 </head>
 <body>
-	<h1>Github - 资源信息</h1>
-	<h5 th:text="${accessToken}"></h5>
+	<div id="view" v-bind:style="{ height: viewHeight}">
+		<view-container></view-container>
+	</div>
+	
+	<!-- 布局模板 -->
+	<template id="viewContainer">
+	  <div class="page-container">
+	    <md-app md-mode="reveal">
+	      <md-app-toolbar class="md-primary">
+	          <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
+	          <md-icon>menu</md-icon>
+	        </md-button>
+	        <router-link to="/home">
+	        <span class="md-title">
+	        	<md-avatar>
+			      <img class="avatar-url" th:alt="${user.login}" th:src="${user.avatarUrl}">
+			    </md-avatar>
+	          <label th:text="${user.login}"></label>
+	        </span>
+	       </router-link>
+	      </md-app-toolbar>
+	      <md-app-drawer :md-active.sync="menuVisible">
+	        <md-toolbar class="md-transparent" md-elevation="0">资源信息</md-toolbar>
+	        <md-list>
+	            <router-link to="/repo">
+		            <md-list-item>
+		            	<md-icon>pages</md-icon>
+			            <span class="md-list-item-text" @click="menuVisible = !menuVisible">Repository</span>
+			        </md-list-item>
+	            </router-link>
+	        </md-list>
+	      </md-app-drawer>
+	      <md-app-content>
+		   	<router-view></router-view>
+       	  </md-app-content>
+	    </md-app>
+	  </div>
+	</template>
+	
+	<!-- 首页 -->
+	<template id="home">
+	  <div class="md-layout">
+	  	<div class="md-layout-item"></div>
+	  	<div class="md-layout-item">
+		  	<md-card class="md-primary" md-theme="green-card">
+		      <md-card-header>
+		        <md-card-header-text>
+		          <div class="md-title" th:text="${user.login}"></div>
+		          <div class="md-subhead">创建时间：<span th:text="${user.createAt}"></span></div>
+		          <div class="md-subhead">上次访问：<span th:text="${user.updatedAt}"></span></div>
+		        </md-card-header-text>
+		        <md-card-media>
+		          <img th:src="${user.avatarUrl}" th:alt="${user.login}">
+		        </md-card-media>
+		      </md-card-header>
+		    </md-card>
+	    </div>
+	    <div class="md-layout-item"></div>
+	  </div>
+	</template>
+	
+	<!-- 资源页 -->
+	<template id="repository">
+	  <div>
+	  	<md-table v-model="searched" md-card>
+	  	  <md-table-toolbar>
+	        <h1 class="md-title">Repository</h1>
+	        <md-field md-clearable class="md-toolbar-section-end">
+          	  <md-input placeholder="按名称查询..." v-model="search" @input="searchOnTable" />
+        	</md-field>
+	      </md-table-toolbar>
+	      <md-table-row>
+	        <md-table-head>名称</md-table-head>
+	        <md-table-head>URL</md-table-head>
+	        <md-table-head>API</md-table-head>
+	        <md-table-head>克隆URL</md-table-head>
+	        <md-table-head>大小</md-table-head>
+	        <md-table-head>语言</md-table-head>
+	        <md-table-head>描述</md-table-head>
+	      </md-table-row>
+	      <md-table-row v-for="repo in searched">
+	        <md-table-cell>{{ repo.name }}</md-table-cell>
+	        <md-table-cell><a v-bind:href="repo.html_url" target="_blank">{{ repo.html_url }}</a></md-table-cell>
+	        <md-table-cell><a v-bind:href="repo.url" target="_blank">{{ repo.url }}</a></md-table-cell>
+	        <md-table-cell>{{ repo.clone_url }}</md-table-cell>
+	        <md-table-cell>{{ repo.size }}</md-table-cell>
+	        <md-table-cell>{{ repo.language }}</md-table-cell>
+	        <md-table-cell>{{ repo.description }}</md-table-cell>
+	      </md-table-row>
+	    </md-table>
+	  </div>
+	</template>
 </body>
+  
+<script th:src="@{/webjars/vue/2.5.16/vue.min.js}"></script>
+<script th:src="@{/webjars/vue-router/3.0.1/dist/vue-router.min.js}"></script>
+<script th:src="@{/js/vue-material.min.js}"></script>
+<script th:src="@{/webjars/axios/0.18.0/dist/axios.min.js}"></script>
+<script th:inline="javascript">
+Vue.use(VueMaterial.default)
+
+Vue.component('viewContainer', {
+	data() {
+		return {
+			menuVisible: false
+		}
+	},
+	template: '#viewContainer'
+})
+
+// 全局方法
+const toLower = text => {
+   return text.toString().toLowerCase()
+}
+
+// 路由配置
+const home = {
+	template: '#home'
+}
+const repo = {
+	template: '#repository',
+	data() {
+		return {
+			search: null,
+	        searched: [],
+			repos: [{
+				name: '',
+				url: '',
+				html_url: '',
+				description: '',
+				clone_url: '',
+				size: 0,
+				language: ''
+			}]	
+		}
+	},
+	methods:{
+		searchOnTable () {
+			if (this.search) {
+     		     this.searched = this.repos.filter(repo => toLower(repo.name).includes(toLower(this.search)))
+    		} else {
+    			this.searched = this.repos
+    		}
+      	}
+	},
+	mounted() {
+		this.$nextTick(function () {
+			axios.get('/github/repos')
+			.then(resp => {
+				if(resp.status == 200) {
+					this.repos = resp.data
+					this.searched = this.repos
+				} 
+			})
+			.catch(err => {
+				console.log(err)
+			});
+	    })
+	}
+}
+const routes = [
+	{ path: '/home', component: home },
+	{ path: '/repo', component: repo }
+]
+const router = new VueRouter({
+	mode: 'history',
+	base: '/github/',
+	routes 
+})
+
+new Vue({
+	el: '#view',
+	router,
+	data: {
+	},
+	computed: {
+		viewHeight() {
+			return window.innerHeight + 'px';
+		}
+	}
+})
+</script>
 </html>

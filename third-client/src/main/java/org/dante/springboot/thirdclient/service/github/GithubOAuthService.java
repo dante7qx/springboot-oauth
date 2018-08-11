@@ -1,38 +1,16 @@
-package org.dante.springboot.thirdclient.service;
-
-import javax.annotation.PostConstruct;
+package org.dante.springboot.thirdclient.service.github;
 
 import org.dante.springboot.thirdclient.constant.OAuthConsts;
 import org.dante.springboot.thirdclient.exception.OAuthException;
-import org.dante.springboot.thirdclient.prop.SpiritProperties;
 import org.dante.springboot.thirdclient.vo.github.AccessTokenReqVO;
 import org.dante.springboot.thirdclient.vo.github.AccessTokenRespVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class GithubService {
+public class GithubOAuthService extends GithubAbstractService {
 
-	@Autowired
-	private JedisClient jedisClient;
-	@Autowired
-	private SpiritProperties spiritProperties;
-	private WebClient tokenWebClient;
-	private WebClient apiWebClient;
-	
-	@PostConstruct
-	public void init() {
-		if(tokenWebClient == null) {
-			tokenWebClient = WebClient.create(spiritProperties.getGithub().getAccessTokenUri());
-		}
-		if(apiWebClient == null) {
-			apiWebClient = WebClient.create(spiritProperties.getGithub().getAuthApiServerUri());
-		}
-	}
-	
 	/**
 	 * 校验回调 Url 接收的参数
 	 * 
@@ -70,17 +48,4 @@ public class GithubService {
 		}
 	}
 	
-	/**
-	 * 构造 API 请求 Header
-	 * 
-	 * @return
-	 * @throws OAuthException
-	 */
-	private String buildReqHeader() throws OAuthException {
-		var val = jedisClient.getString(OAuthConsts.GITHUB_ACCESS_TOKEN);
-		if(StringUtils.isEmpty(val)) {
-			throw new OAuthException("Token 已经过期，请重新申请! ");
-		}
-		return "token ".concat(val);
-	}
 }

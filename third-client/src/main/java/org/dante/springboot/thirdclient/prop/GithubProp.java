@@ -41,4 +41,5 @@ public class GithubProp {
 	 * 服务端资源 API 接口
 	 */
 	private String authApiServerUri;
+	
 }
