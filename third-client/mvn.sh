@@ -10,3 +10,6 @@ if [ "$deploy" = "deploy" ]; then
 	echo "替换新的 jar --> third-client-1.0.jar"
 	cp -f target/third-client-1.0.jar /Users/dante/Documents/Technique/Docker/mvnrepo/
 fi
+
+echo "==> 清理 target，并重新编译"
+${m2_home}/bin/mvn clean compile
