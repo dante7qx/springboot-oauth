@@ -89,6 +89,9 @@ public class GithubAuthorizeController {
 	@GetMapping("/oauth/authorize")
 	public String authorize() {
 		var accessToken = jedisClient.getString(OAuthConsts.GITHUB_ACCESS_TOKEN);
+		if(!StringUtils.isEmpty(accessToken)) {
+			return "redirect:/github/home";
+		}
 		var github = spiritProperties.getGithub();
 		var serverAuthorizeUri = github.getAuthorizeUri()
 				.concat("?")
@@ -97,9 +100,6 @@ public class GithubAuthorizeController {
 				.concat("&redirect_uri=").concat(github.getRedirectUri())
 				.concat("&scope=").concat(github.getScope())
 				.concat("&state=").concat(RandomStringUtils.randomAlphabetic(6).toLowerCase());
-		if(!StringUtils.isEmpty(accessToken)) {
-			return "redirect:/github/home";
-		}
 		return "redirect:".concat(serverAuthorizeUri);
 	}
 	

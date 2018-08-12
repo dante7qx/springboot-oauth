@@ -23,4 +23,9 @@ public class OAuthConsts {
 	 */
 	public static final String GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
 	
+	/**
+	 * Facebook Resource Server 常量类
+	 */
+	public static final String FACEBOOK_ACCESS_TOKEN = "FACEBOOK_ACCESS_TOKEN";
+	
 }

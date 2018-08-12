@@ -24,11 +24,20 @@ spirit:
     github:
       client-id: 2a072c55d48f194676f7
       client-secret: 0b37929df2bb3689f8605e11f2c4306f649cebb9
-      redirect-uri: http://spiritprd-oauth-client.test.bizjetcloud.com/github/oauth/callback
+      redirect-uri: https://spiritprd-oauth-client.test.bizjetcloud.com/github/oauth/callback
       scope: user,repo
       authorize-uri: https://github.com/login/oauth/authorize
       access-token-uri: https://github.com/login/oauth/access_token
       auth-api-server-uri: https://api.github.com
+    facebook:
+      app-id: 848601652009345
+      app-secret: 7cdd36b98556fa2a6ec6078c74fa8f2d
+      client-secret: 623c1fe3bbf5cb5d31e5bcdd2d492114
+      redirect-uri: https://spiritprd-oauth-client.test.bizjetcloud.com/facebook/oauth/callback
+      scope: user_hometown
+      authorize-uri: https://www.facebook.com/v3.1/dialog/oauth
+      access-token-uri: https://graph.facebook.com/v3.1/oauth/access_token
     wechat:
-      app-id: wxc94c4e95f176c3c5
-      appsecret: 1a7426b06da8de84ad4ab5d8e9b5dd4a
+      app-id: wxa89ffe1b7f745700
+      appsecret: dbcc61c34d3e49c581625e958ded3ddc
+     

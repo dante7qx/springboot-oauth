@@ -24,4 +24,8 @@ public class SpiritProperties {
 	 */
 	private WechatProp wechat;
 	
+	/**
+	 * Facebook - 服务端配置
+	 */
+	private FacebookProp facebook;
 }

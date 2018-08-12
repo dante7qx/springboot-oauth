@@ -15,4 +15,5 @@ import lombok.Data;
 public class WechatProp {
 	private String appId;
 	private String appsecret;
+	
 }
