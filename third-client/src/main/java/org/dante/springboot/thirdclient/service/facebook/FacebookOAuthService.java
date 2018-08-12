@@ -26,7 +26,7 @@ public class FacebookOAuthService extends FacebookAbstractService {
 	}
 	
 	/**
-	 * 获取 Github Resource Server 访问令牌
+	 * 获取 Facebook Resource Server 访问令牌
 	 * 将 AccessToken 存储到 Redis 中
 	 * 
 	 * @param accessTokenReq
@@ -42,7 +42,7 @@ public class FacebookOAuthService extends FacebookAbstractService {
 			.bodyToMono(AccessTokenRespVO.class)
 			.block();
 		if(accessTokenResp.getError() != null) {
-			jedisClient.saveString(OAuthConsts.FACEBOOK_ACCESS_TOKEN, accessTokenResp.getAccessToken());
+			jedisClient.saveString(OAuthConsts.FACEBOOK_ACCESS_TOKEN, accessTokenResp.getAccessToken(), accessTokenResp.getExpiresIn());
 		} else {
 			throw new OAuthException("从 Github 获取 Token 失败 [" + accessTokenResp.getError().getMessage() + "]");
 		}
