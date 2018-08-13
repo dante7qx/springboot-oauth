@@ -74,7 +74,7 @@
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-compiler-plugin</artifactId>
-			    <version>${maven-compiler-plugin.version}</version>
+			    <version>${maven-compiler-plugin.version}</version><!--$NO-MVN-MAN-VER$-->
 			    <configuration>
 			        <release>10</release> 
 			    </configuration>
