@@ -21,4 +21,11 @@ public class ThirdClientApplicationTests {
 		jedisClient.saveString(OAuthConsts.GITHUB_ACCESS_TOKEN, "df32b69247ece0244a88ca07b68635d80f26b9bf");
 	}
 	
+	@Test
+	public void persistFacebookToken() {
+		jedisClient.saveString(OAuthConsts.FACEBOOK_ACCESS_TOKEN, "EAAMDzHgGGYEBAPeJKSrQ1vQXOmUbRUd5db3ArZCzipvK0UL42vKEnTdQ96VI943khHZBe9CHmQFuz3qFznGJGWZA8kApR9znuRIwSFZCfTyQKaAqjQPSUXWpT5PNI4n9gdKTYZCHaayikyCgvjmkGGmQ5FQyibNR92aZCbCIDS6HLaZBWBpxo9q", 5183803);
+	}
+	
+	
+	
 }

@@ -48,6 +48,6 @@ public abstract class FacebookAbstractService {
 		if(StringUtils.isEmpty(val)) {
 			throw new OAuthException("Token 已经过期，请重新申请! ");
 		}
-		return "token ".concat(val);
+		return "bearer ".concat(val);
 	}
 }
